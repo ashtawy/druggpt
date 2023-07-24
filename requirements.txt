@@ -1,0 +1,11 @@
+torchvision
+torchaudio
+torch
+transformers
+datasets
+scipy
+scikit-learn
+mols2grid
+rdkit
+streamlit
+streamlit-ketcher

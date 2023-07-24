@@ -1,0 +1,21 @@
+name: druggpt # conda env create -f environment.yml
+channels:
+  - conda-forge
+  - openbabel
+dependencies:
+  - python=3.7
+  - openbabel
+  - pip
+  - pip:
+    - torchvision
+    - torchaudio
+    - torch
+    - --extra-index-url https://download.pytorch.org/whl/cu117
+    - transformers
+    - datasets
+    - scipy
+    - scikit-learn
+    - mols2grid
+    - rdkit
+    - streamlit
+    - streamlit-ketcher
