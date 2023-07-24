@@ -1,22 +1,12 @@
-import argparse
-import csv
-import hashlib
 import os
 import platform
-import shutil
-import subprocess
-import sys
-import tempfile
-import warnings
 
 import mols2grid
-import numpy as np
 import pandas as pd
 import streamlit as st
 import streamlit.components.v1 as components
 import torch
 from rdkit import Chem
-from tqdm import tqdm
 from transformers import AutoTokenizer, GPT2LMHeadModel
 
 
@@ -50,11 +40,6 @@ def display_results(df_result, smiles_column, key):
         key=f"{key}_n_rows",
     )
 
-    # if st.session_state["n_cols"] is None:
-    #   st.session_state["n_cols"] = 6
-    # if st.session_state["n_rows"] is None:
-    #    st.session_state["n_rows"] = 3
-
     raw_html = mols2grid.display(
         df_result,
         smiles_col=smiles_column,
@@ -62,8 +47,6 @@ def display_results(df_result, smiles_column, key):
         tooltip=tooltip,
         n_cols=n_cols,
         n_rows=n_rows,
-        # template="table",
-        # prerender=True,
     )._repr_html_()
     height = 600 if df_result.shape[0] > 16 else 400
     height = height + len(subset) * 10
@@ -82,9 +65,6 @@ def parse_fasta_file(file):
 
     protein_sequence = "".join(sequence)
     return protein_sequence
-
-
-# What EGFR mutations are linked to cancer and at what location in the gene they appear
 
 
 def get_data():
@@ -126,6 +106,7 @@ def generate():
     else:
         st.error("No protein sequence or ligand prompt provided.")
         return
+    st.write(prompt)
     # Generate molecules
     generated = torch.tensor(tokenizer.encode(prompt)).unsqueeze(0)
     generated = generated.to(device)
@@ -206,15 +187,7 @@ def main():
     # search()
     get_data()
     get_configs()
-    configs = {
-        "ligand_prompt": "",
-        "directly_generate": False,
-        "num_generated": 50,
-        "device": "cuda",
-        "batch_generated_size": 32,
-        "top_k": 5,
-        "top_p": 0.6,
-    }
+
     # question = st.text_input("Enter a question", key="question")
     if st.button("Generate"):
         if st.session_state.get("protein_sequence") is not None or st.session_state.get(
